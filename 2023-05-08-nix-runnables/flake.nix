@@ -1,9 +1,10 @@
 {
   # All about runnables.
   # Source of truth: https://github.com/NixOS/nix/blob/master/tests/flakes/run.sh
-  outputs = inputs@{ flake-parts, nixpkgs, ... }:
+  outputs = inputs@{ flake-parts, systems, nixpkgs, ... }:
   flake-parts.lib.mkFlake { inherit inputs; } {
-    systems = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+    # consumer can override this, see https://github.com/nix-systems/nix-systems#consumer-usage
+    systems = (import systems);
     perSystem = { config, self', inputs', pkgs, system, ... }: 
     {
       # these can be `nix run` because their program name is the same as their package name.
